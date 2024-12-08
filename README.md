@@ -3,7 +3,7 @@
 This repository provides the code implementation of our RA-L paper.
 
 <p align="center">
-<img width="900" height="506" src="AC_IQN_based_system.jpg"> 
+<img width="890" height="500" src="AC_IQN_based_system.jpg"> 
 </p>
 
 ## Build VRX Simulator
