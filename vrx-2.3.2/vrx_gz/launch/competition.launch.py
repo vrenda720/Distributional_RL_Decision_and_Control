@@ -92,20 +92,6 @@ def launch(context, *args, **kwargs):
             'agent_type',
             default_value=agent_type
         )
-        # model_path_arg = DeclareLaunchArgument(
-        #     'model_path',
-        #     default_value='/home/rfal/Distributional_RL_Navigation_3/train_RL_agents/training_data/AC_IQN/traced_AC_IQN_model.pt'
-        #     # default_value='/home/rfal/Distributional_RL_Navigation_3/train_RL_agents/training_data/IQN/traced_IQN_model.pt'
-        #     # default_value='/home/rfal/Distributional_RL_Navigation_3/train_RL_agents/training_data/DDPG/traced_DDPG_model.pt'
-        #     # default_value='/home/rfal/Distributional_RL_Navigation_3/train_RL_agents/training_data/training_2024-03-21-18-56-40/traced_DQN_model.pt'
-        # )
-        # agent_type_arg = DeclareLaunchArgument(
-        #     'agent_type',
-        #     default_value='AC-IQN'
-        #     # default_value='IQN'
-        #     # default_value='DDPG'
-        #     # default_value='DQN'
-        # )
 
         lidar_processor_dir = get_package_share_directory('lidar_processor')
         state_processor_dir = get_package_share_directory('state_processor')
