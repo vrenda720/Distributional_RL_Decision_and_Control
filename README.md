@@ -6,7 +6,7 @@ This repository provides the code implementation of our RA-L paper.
 <img width="890" height="480" src="AC_IQN_based_system.jpg"> 
 </p>
 
-## Build VRX Simulator
+## Build VRX Simulation Environment
 The Gazebo based simulator [VRX](https://github.com/osrf/vrx) is used for simulation experiments. We developed new packages that realize the navigation system and added them to the original simulator. The simulation envrionment can be built as follows.  
 
 Download LibTorch from [here](https://download.pytorch.org/libtorch/cpu/) and add it to environment path. Our code implementation uses the version 2.2.1+cpu. 
@@ -30,4 +30,10 @@ source /opt/ros/humble/setup.bash
 colcon build --merge-install
 . install/setup.bash
 cp src/run_vrx_experiments.py .
+```
+
+## Run VRX Experiments
+Navigate to vrx_ws directory, modify run_vrx_experiments.py: (1) Specify method (RL, APF or MPC). If using a RL agent, specify the corresponding agent_type and model_path; (2) Set eval_schedules parameters (Note: we don't use the vortex model in this work, and num_cores is always 0); (3) Set exp_result_file_dir to the directory that saves experiment results. Then run experiments with the following command.
+```
+python run_vrx_experiments.py
 ```

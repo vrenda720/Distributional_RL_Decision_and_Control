@@ -324,19 +324,6 @@ class ExperimentManager:
                 return True
         
         for robot_name in self.robot_info.keys():
-            
-            # if self.save_traj:
-            #     # save pose and velocity data
-            #     t = self.robot_info[robot_name]["header"].stamp
-            #     self.timestamp_data[robot_name].append(round(t.sec+t.nanosec * 1e-9,2))
-                
-            #     self.pose_data[robot_name].append([self.robot_info[robot_name]["pose"].position.x,
-            #                             self.robot_info[robot_name]["pose"].position.y,
-            #                             self.robot_info[robot_name]["pose"].orientation.z])
-                
-            #     self.velocity_data[robot_name].append([self.robot_info[robot_name]["velocity"].linear.x,
-            #                                            self.robot_info[robot_name]["velocity"].linear.y])
-
             if not self.robot_info[robot_name]["reach_goal"]:
                 return False
         
@@ -372,7 +359,7 @@ if __name__ == '__main__':
         raise RuntimeError("Agent type not implemented!")
 
     # vrx envrionment configuration file
-    sdf_file_dir = os.path.join("project/directory","/vrx_ws/install/share/vrx_gz/worlds")
+    sdf_file_dir = "install/share/vrx_gz/worlds"
     
     input_world = "sydney_regatta_original"
     input_sdf_file = f"{sdf_file_dir}/{input_world}.sdf"
@@ -406,9 +393,9 @@ if __name__ == '__main__':
     dt = datetime.now()
     timestamp = dt.strftime("%Y-%m-%d-%H-%M-%S")
     
-
-    result_file_dir = "/vrx/experiments/results/save/directory"
-    os.makedirs(os.path.join(result_file_dir,f"{agent_type}/{timestamp}"))
+    exp_result_file_dir = "/vrx/experiments/results/save/directory"
+    result_file_dir = os.path.join(exp_result_file_dir,f"{agent_type}/{timestamp}")
+    os.makedirs(result_file_dir)
     result_file = "vrx_exp_results.npz"
 
     for idx,count in enumerate(eval_schedules["num_episodes"]):

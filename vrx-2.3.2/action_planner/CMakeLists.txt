@@ -3,7 +3,6 @@ project(action_planner)
 
 # Add libtorch (modify to your own location)
 list(APPEND CMAKE_PREFIX_PATH "/home/rfal/libtorch")
-# list(APPEND CMAKE_MODULE_PATH "/home/rfal/libtorch/share/cmake")
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
