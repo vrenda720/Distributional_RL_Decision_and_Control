@@ -6,6 +6,22 @@ This repository provides the code implementation of our RA-L paper.
 <img width="890" height="480" src="AC_IQN_based_system.jpg"> 
 </p>
 
+## Train RL agents
+Our proposed ASV decision making and control policy based on AC-IQN, and all other five RL based policies described in our paper, can be trained by running the following command. You can also skip this training section and run experiments with the provided pretrained models.  
+
+```
+python train_rl_agents.py -C CONFIG_FILE [-P NUM_PROCS] [-D DEVICE]
+```
+
+Replace CONFIG_FILE with the path to the training config file. Example training config files are provided in config directory.   
+
+-P and -D flags are optional. -P can be used to specify the number of processes to be run in parallel when training multiple models. -D can be used to specify the CPU or GPU intended to be used in training.
+
+To convert a trained PyTorch model to a TorchScript file that can be used by the navigation system operating in the Gazebo environment, customize save_model_to_torch_script.py as needed, and run the following command.
+```
+python save_model_to_torch_script.py
+```    
+
 ## Build VRX Simulation Environment
 The Gazebo based simulator [VRX](https://github.com/osrf/vrx) is used for simulation experiments. We developed new packages that realize the navigation system and added them to the original simulator. The simulation envrionment can be built as follows.  
 
@@ -33,7 +49,7 @@ cp src/run_vrx_experiments.py .
 ```
 
 ## Run VRX Experiments
-Navigate to vrx_ws directory, modify run_vrx_experiments.py: (1) Specify method (RL, APF or MPC). If using a RL agent, specify the corresponding agent_type and model_path; (2) Set eval_schedules parameters (Note: we don't use the vortex model in this work, and num_cores is always 0); (3) Set exp_result_file_dir to the directory that saves experiment results. Then run experiments with the following command.
+Navigate to vrx_ws directory, and customize run_vrx_experiments.py as needed: (1) Specify method ("RL", "APF" or "MPC"). If using a RL agent ("AC-IQN", "IQN", "SAC", "DDPG", "Rainbow", or "DQN"), specify the corresponding agent_type and model_path; (2) Set eval_schedules parameters (Note: we don't use the vortex model in this work, and num_cores is always 0); (3) Set exp_result_file_dir to the directory that saves experiment results. Then run experiments with the following command.
 ```
 python run_vrx_experiments.py
 ```
