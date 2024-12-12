@@ -1,13 +1,13 @@
 # Distributional RL Decision and Control
 
-This repository provides the code implementation of our RA-L paper.
+This repository provides the code implementation of our RA-L paper. We developed an ASV decision making and control policy based on Actor Critic Implicit Quantile Networks (AC-IQN), and integrated it into a navigation system that works in congested multi-vehicle environments, under the influence of wind and wave disturbances on ASV motion and perception. The performance of our approach is shown in the video [here](https://robustfieldautonomylab.github.io/Lin_RA-L_2024_10-FinalVideo.mp4).  
 
 <p align="center">
 <img width="890" height="480" src="AC_IQN_based_system.jpg"> 
 </p>
 
 ## Train RL agents
-Our proposed ASV decision making and control policy based on AC-IQN, and all other five RL based policies described in our paper, can be trained by running the following command. You can also skip this training section and run experiments with the provided pretrained models.  
+Our proposed AC-IQN based policy, and all other five RL based policies described in our paper, can be trained by running the following command. You can also skip this training section and run experiments with the provided pretrained models.  
 
 ```
 python train_rl_agents.py -C CONFIG_FILE [-P NUM_PROCS] [-D DEVICE]
