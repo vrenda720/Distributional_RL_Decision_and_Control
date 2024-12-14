@@ -358,6 +358,7 @@ if __name__ == '__main__':
     else:
         raise RuntimeError("Agent type not implemented!")
 
+
     # vrx envrionment configuration file
     sdf_file_dir = "install/share/vrx_gz/worlds"
     
@@ -366,17 +367,6 @@ if __name__ == '__main__':
     
     output_world = "sydney_regatta"
     output_sdf_file = f"{sdf_file_dir}/{output_world}.sdf"
-
-    # vrx experiment settings file 
-    # note: running over 10 episodes in one trial is not recommended
-    #       since Gazebo is more likely to crash after frequent killing
-    #       and relaunching simulations in this program   
-    eval_schedules = dict(num_episodes=[10],
-                        num_robots=[5],
-                        num_cores=[0],
-                        num_obstacles=[4],
-                        min_start_goal_dis=[40.0]
-                        )
 
 
     init_poses_data = []
@@ -387,61 +377,117 @@ if __name__ == '__main__':
     successes_data = []
     travel_times_data = []
 
-    seed = 0
-    test_env = marinenav_env.MarineNavEnv3(seed = seed)
     
     dt = datetime.now()
     timestamp = dt.strftime("%Y-%m-%d-%H-%M-%S")
-    
-    exp_result_file_dir = "/vrx/experiments/results/save/directory"
+    exp_result_file_dir = "vrx/experiments/results/save/directory"
     result_file_dir = os.path.join(exp_result_file_dir,f"{agent_type}/{timestamp}")
     os.makedirs(result_file_dir)
-    result_file = "vrx_exp_results.npz"
 
-    for idx,count in enumerate(eval_schedules["num_episodes"]):
-        init_poses_data.append([])
-        goals_data.append([])
-        buoy_poses_data.append([])
-        robot_num_data.append(eval_schedules["num_robots"][idx])
-        buoy_num_data.append(eval_schedules["num_obstacles"][idx])
+
+    run_with_exp_config = True
+    if run_with_exp_config:
+        ##### run an experiment with specified config ##### 
+        
+        print(f"\n\n\nRunning {agent_type} experiment with given config settings \n\n\n")
+        
+        exp_config_file = "vrx_exp_config.json"
+        result_file = "vrx_exp_traj.json"
+
         successes_data.append([])
         travel_times_data.append([])
-        for i in range(count):
-            print(f"\n\n\nRunning {agent_type} experiment {i} of schedule {idx}\n\n\n")
 
-            init_poses,goals,buoy_poses = exp_setup(test_env,eval_schedules,idx)
-            
-            init_poses_data[-1].append(copy.deepcopy(init_poses))
-            goals_data[-1].append(copy.deepcopy(goals))
-            buoy_poses_data[-1].append(copy.deepcopy(buoy_poses))
+        with open(exp_config_file,"r") as f:
+            episode_setup = json.load(f)
+        
+        init_poses,goals,buoy_poses = read_exp_setup(episode_setup)
 
-            add_buoy_to_sdf(input_sdf_file,output_sdf_file,buoy_poses)
+        add_buoy_to_sdf(input_sdf_file,output_sdf_file,buoy_poses)
 
-            rclpy.init()
+        rclpy.init()
 
-            exp_manager = ExperimentManager(eval_schedules["num_robots"][idx],successes_data,travel_times_data)
-            exp_manager.launch_simulation(init_poses,goals,buoy_poses,method,agent_type,model_path,output_world)
+        exp_manager = ExperimentManager(len(episode_setup["robots"]["start"]),successes_data,travel_times_data,save_traj=True)
+        exp_manager.launch_simulation(init_poses,goals,buoy_poses,method,agent_type,model_path,output_world)
 
-            successes_data = copy.deepcopy(exp_manager.successes_data)
-            travel_times_data = copy.deepcopy(exp_manager.travel_times_data)
+        # save trajectory data
+        timestamps = {}
+        poses = {}
+        velocities = {}
+        for name in exp_manager.timestamp_data.keys():
+            timestamps[name] = [round(t.stamp.sec+t.stamp.nanosec * 1e-9,2) for t in exp_manager.timestamp_data[name]]
+            poses[name] = [[p.position.x,p.position.y,p.orientation.x,p.orientation.y,p.orientation.z,p.orientation.w] 
+                           for p in exp_manager.pose_data[name]]
+            velocities[name] = [[v.linear.x,v.linear.y] for v in exp_manager.velocity_data[name]]
 
-            print("\n\n\n====== Experiment Result ======")
-            print("Number of robots: ",exp_manager.num_robots)
-            print("Current episode success: ","True" if exp_manager.exp_success else "False")
-            print("Current episode travel times:",exp_manager.robot_info)
-            print("All episodes success rate: ",np.sum(successes_data[-1])/len(successes_data[-1]))
-            print("All episodes avg travel time: ",np.mean(travel_times_data[-1]) if len(travel_times_data[-1])>0 else "NaN","\n\n\n")
+            print(f"\ntimes: {len(timestamps[name])}, poses: {len(poses[name])}, velocities: {len(velocities[name])}\n")
+        
+        traj_data = dict(timestamps=timestamps,
+                         poses=poses,
+                         velocities=velocities)
 
-            np.savez(os.path.join(result_file_dir,result_file),
-                    agent_type=agent_type,
-                    seed=seed,
-                    init_poses=init_poses_data,
-                    goals=goals_data,
-                    buoy_poses=buoy_poses_data,
-                    robot_num=robot_num_data,
-                    buoy_num=buoy_num_data,
-                    successes=successes_data,
-                    travel_times=travel_times_data)
-            
-            # rclpy.shutdown()
+        with open(os.path.join(result_file_dir,result_file),"w") as file:
+            json.dump(traj_data,file)
+    else:
+        ##### run multiple experiments with randomly generated configs #####
+
+        # vrx experiment settings file 
+        # note: running over 10 episodes in one trial is not recommended
+        #       since Gazebo is more likely to crash after frequent killing
+        #       and relaunching simulations in this program   
+        eval_schedules = dict(num_episodes=[10],
+                            num_robots=[5],
+                            num_cores=[0],
+                            num_obstacles=[4],
+                            min_start_goal_dis=[40.0]
+                            )
+
+        seed = 0
+        test_env = marinenav_env.MarineNavEnv3(seed = seed)
+        
+        result_file = "vrx_exp_results.npz"
+
+        for idx,count in enumerate(eval_schedules["num_episodes"]):
+            init_poses_data.append([])
+            goals_data.append([])
+            buoy_poses_data.append([])
+            robot_num_data.append(eval_schedules["num_robots"][idx])
+            buoy_num_data.append(eval_schedules["num_obstacles"][idx])
+            successes_data.append([])
+            travel_times_data.append([])
+            for i in range(count):
+                print(f"\n\n\nRunning {agent_type} experiment {i} of schedule {idx}\n\n\n")
+
+                init_poses,goals,buoy_poses = exp_setup(test_env,eval_schedules,idx)
+                
+                init_poses_data[-1].append(copy.deepcopy(init_poses))
+                goals_data[-1].append(copy.deepcopy(goals))
+                buoy_poses_data[-1].append(copy.deepcopy(buoy_poses))
+
+                add_buoy_to_sdf(input_sdf_file,output_sdf_file,buoy_poses)
+
+                rclpy.init()
+
+                exp_manager = ExperimentManager(eval_schedules["num_robots"][idx],successes_data,travel_times_data)
+                exp_manager.launch_simulation(init_poses,goals,buoy_poses,method,agent_type,model_path,output_world)
+
+                successes_data = copy.deepcopy(exp_manager.successes_data)
+                travel_times_data = copy.deepcopy(exp_manager.travel_times_data)
+
+                print("\n\n\n====== Experiment Result ======")
+                print("Number of robots: ",exp_manager.num_robots)
+                print("Current episode success: ","True" if exp_manager.exp_success else "False")
+                print("Current episode travel times:",exp_manager.robot_info)
+                print("All episodes success rate: ",np.sum(successes_data[-1])/len(successes_data[-1]))
+                print("All episodes avg travel time: ",np.mean(travel_times_data[-1]) if len(travel_times_data[-1])>0 else "NaN","\n\n\n")
+
+                np.savez(os.path.join(result_file_dir,result_file),
+                        agent_type=agent_type,
+                        seed=seed,
+                        init_poses=init_poses_data,
+                        goals=goals_data,
+                        buoy_poses=buoy_poses_data,
+                        robot_num=robot_num_data,
+                        buoy_num=buoy_num_data,
+                        successes=successes_data,
+                        travel_times=travel_times_data)
 
