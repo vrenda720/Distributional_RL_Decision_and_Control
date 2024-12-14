@@ -17,8 +17,8 @@ if __name__ == "__main__":
 
     ev = env_visualizer.EnvVisualizer(draw_vrx_traj=True)
 
-    # trajectory section to visualize (indices of start and end poses)
-    plot_steps = [135,250]
+    # moments of visualizing poses (list indices)
+    plot_steps = [100,200,300]
 
     # convert coordinates in the VRX simulator to that in env_visualizer 
     for i in range(len(episode_config["robots"]["start"])):
