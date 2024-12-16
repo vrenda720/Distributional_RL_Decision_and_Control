@@ -6,6 +6,20 @@ This repository provides the code implementation of our RA-L paper [here](https:
 <img width="890" height="480" src="AC_IQN_based_system.jpg"> 
 </p>
 
+If you find this repository useful, please cite our paper
+```
+@ARTICLE{10804093,
+  author={Lin, Xi and Szenher, Paul and Huang, Yewei and Englot, Brendan},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Distributional Reinforcement Learning Based Integrated Decision Making and Control for Autonomous Surface Vehicles}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-8},
+  doi={10.1109/LRA.2024.3518839}}
+
+```
+
 ## Preparing RL based Decision Making and Control Policies  
 The preparation process of our proposed AC-IQN based policy, and all other five RL based policies described in our paper, is described as follows. You can also skip this section and run VRX experiments with the provided pretrained models.  
 
