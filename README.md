@@ -53,7 +53,7 @@ python save_model_to_torch_script.py
 ```    
 
 ## Build VRX Simulation Environment
-The Gazebo based simulator [VRX](https://github.com/osrf/vrx) is used for simulation experiments. We developed new packages that realize the navigation system and added them to the original simulator. The simulation envrionment can be built as follows.  
+The Gazebo based simulator [VRX](https://github.com/osrf/vrx) is used for simulation experiments. We developed new packages that realize the navigation system and added them to the original simulator. The list of files we created and added, as well as files we modified from the original simulator, is recorded in [file_modification_note](vrx-2.3.2/file_modification_note.txt). The simulation envrionment can be built as follows.  
 
 Download LibTorch from [here](https://download.pytorch.org/libtorch/cpu/) and add it to environment path. Our code implementation uses the version 2.2.1+cpu. 
 ```
