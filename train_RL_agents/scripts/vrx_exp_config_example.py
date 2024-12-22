@@ -6,7 +6,7 @@ import os
 
 if __name__ == "__main__":
     # This is an example of generating and saving a vrx experiment config file
-    seed = 0
+    seed = 6
     env = marinenav_env.MarineNavEnv3(seed = seed)
     
     env.num_robots = 5
