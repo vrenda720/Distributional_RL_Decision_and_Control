@@ -93,11 +93,11 @@ We provide an example script that generates and saves settings of an VRX experim
 ```
 python vrx_exp_config_example.py
 ``` 
-Set run_with_exp_config to True, and run the experiment with the following command.
+Set run_with_exp_config to True, and exp_config_file to path to the VRX experiment episode config file. Then run the experiment with the following command.
 ```
 python run_vrx_experiments.py
 ```
-We provide a script to visualize trajectories in the VRX experiment. In visualize_vrx_trajectory.py set (1) episode_dir to the directory that saves experiment results, and (2) plot_steps as moments (list indices in the result data) when you would like to visualize vehicles' poses. Then run the following command
+We provide a script that visualizes trajectories in the VRX experiment episode. In visualize_vrx_trajectory.py set (1) episode_dir to the directory that saves experiment results, and (2) plot_steps as moments (list indices in the result data) when you would like to visualize vehicles' poses. Then run the following command
 ```
 python visualize_vrx_trajectory.py 
 ```

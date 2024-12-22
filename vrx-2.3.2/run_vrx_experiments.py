@@ -391,8 +391,7 @@ if __name__ == '__main__':
         
         print(f"\n\n\nRunning {agent_type} experiment with given config settings \n\n\n")
         
-        exp_config_file = "vrx_exp_config.json"
-        result_file = "vrx_exp_traj.json"
+        exp_config_file = "path/to/vrx/experiment/episode/config/file"
 
         successes_data.append([])
         travel_times_data.append([])
@@ -425,8 +424,13 @@ if __name__ == '__main__':
                          poses=poses,
                          velocities=velocities)
 
+        result_file = "vrx_exp_traj.json"
         with open(os.path.join(result_file_dir,result_file),"w") as file:
             json.dump(traj_data,file)
+        
+        config_file = "vrx_exp_config.json"
+        with open(os.path.join(result_file_dir,config_file),"w") as file:
+            json.dump(episode_setup,file)
     else:
         ##### run multiple experiments with randomly generated configs #####
 
