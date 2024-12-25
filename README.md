@@ -12,10 +12,10 @@ If you find this repository useful, please cite our paper
   author={Lin, Xi and Szenher, Paul and Huang, Yewei and Englot, Brendan},
   journal={IEEE Robotics and Automation Letters}, 
   title={Distributional Reinforcement Learning Based Integrated Decision Making and Control for Autonomous Surface Vehicles}, 
-  year={2024},
-  volume={},
-  number={},
-  pages={1-8},
+  year={2025},
+  volume={10},
+  number={2},
+  pages={1194-1201},
   doi={10.1109/LRA.2024.3518839}}
 
 ```
