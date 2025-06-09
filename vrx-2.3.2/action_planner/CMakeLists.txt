@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 project(action_planner)
 
 # Add libtorch (modify to your own location)
-list(APPEND CMAKE_PREFIX_PATH "/home/rfal/libtorch")
+list(APPEND CMAKE_PREFIX_PATH "/home/rfal/src/libtorch")
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
