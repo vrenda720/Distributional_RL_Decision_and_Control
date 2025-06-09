@@ -1,6 +1,6 @@
 from vrx_gz.bridge import Bridge, BridgeDirection
 
-import sdformat13 as sdf
+import sdformat14 as sdf
 
 
 def gz_prefix(world_name, model_name, link_name, sensor_name):
