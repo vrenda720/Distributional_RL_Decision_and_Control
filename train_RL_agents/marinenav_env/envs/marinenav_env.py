@@ -1,7 +1,6 @@
 import numpy as np
 import scipy.spatial
 import marinenav_env.envs.utils.robot as robot
-import gym
 import json
 import copy
 
@@ -22,7 +21,7 @@ class Obstacle:
         self.y = y # y coordinate of the obstacle center
         self.r = r # radius of the obstacle    
 
-class MarineNavEnv3(gym.Env):
+class MarineNavEnv3():
 
     def __init__(self, seed:int=0, schedule:dict=None, is_eval_env:bool=False):
 
